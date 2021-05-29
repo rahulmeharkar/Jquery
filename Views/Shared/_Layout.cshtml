@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebUI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/common.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebUI</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script type="text/javascript">
+                function change() {
+                    document.getElementById('formID').style.display = 'block';
+                    document.getElementById('bt1').style.display = 'none';
+                }
+                function change2() {
+                    document.getElementById('formID1').style.display = 'block';
+                    document.getElementById('bt3').style.display = 'none';
+                }
+                function change3() {
+                    document.getElementById('formID3').style.display = 'block';
+                    document.getElementById('bt5').style.display = 'none';
+                }
+                function change4() {
+                    document.getElementById('formID4').style.display = 'block';
+                    document.getElementById('bt7').style.display = 'none';
+                }
+                function change5() {
+                    document.getElementById('formID5').style.display = 'block';
+                    document.getElementById('bt9').style.display = 'none';
+                }
+                $(document).ready(function () {
+                    $("#formID").hide();
+                    $("#formID1").hide();
+                    $("#formID3").hide();
+                    $("#formID4").hide();
+                    $("#formID5").hide();
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:44355/listcountry",
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (res) {
+                            $.each(res, function (index, value) {
+                                $('#country').append('<option value="' + value.countryid + '">' + value.cname + '</option>');
+                            })
+                        }
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:44355/listcountry",
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (res) {
+                            $.each(res, function (index, value) {
+                                $('#country1').append('<option value="' + value.countryid + '">' + value.cname + '</option>');
+                            })
+                        }
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:44355/listcountry",
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (res) {
+                            $.each(res, function (index, value) {
+                                $('#country2').append('<option value="' + value.countryid + '">' + value.cname + '</option>');
+                            })
+                        }
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:44355/listdepartment",
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (resu) {
+                            $.each(resu, function (index, value) {
+                                $('#dept').append('<option value="' + value.departmentid + '">' + value.departmentname + '</option>');
+                            })
+                        }
+                    });
+
+                    $("#country1").change(function () {
+                        var id = $("#country1").val();
+                        $("#state").prop("disabled", false);
+                        $.ajax({
+                            type: "GET",
+                            url: "https://localhost:44355/liststate?countryid=" + id,
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (resul) {
+                                $.each(resul, function (index, value) {
+                                    $('#state').append('<option value="' + value.stateid + '">' + value.statename + '</option>');
+                                })
+                            }
+                        });
+                    });
+                    $("#country2").change(function () {
+                        var id = $("#country2").val();
+                        $("#state1").prop("disabled", false);
+                        $.ajax({
+                            type: "GET",
+                            url: "https://localhost:44355/liststate?countryid=" + id,
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (resul) {
+                                $.each(resul, function (index, value) {
+                                    $('#state1').append('<option value="' + value.stateid + '">' + value.statename + '</option>');
+                                })
+                            }
+                        });
+                    });
+
+                    $("#state").change(function () {
+                        var id1 = $("#state").val();
+                        $("#city").prop("disabled", false);
+                        $.ajax({
+                            type: "GET",
+                            url: "https://localhost:44355/listcity?stateid=" + id1,
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (result) {
+                                $.each(result, function (index, value) {
+                                    $('#city').append('<option value="' + value.cityid + '">' + value.cityname + '</option>');
+                                })
+                            }
+                        });
+                    });
+
+                    $("#submit").click(function () {
+                        var obj = {
+                            firstname: $('#firstname').val(),
+                            lastname: $('#lastname').val(),
+                            email: $('#inputEmail4').val(),
+                            phone: $('#phone').val(),
+                            gender: $('#gender').val(),
+                            dob: $('#dob').val(),
+                            departmentid: parseInt($('#dept').val()),
+                            hobbies: $('#hobbies').val(),
+                            countryid: parseInt($('#country1').val()),
+                            stateid: parseInt($('#state').val()),
+                            cityid: parseInt($('#city').val()),
+                            pincode: $('#pincode').val()
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44355/addemployee",
+                            data: JSON.stringify(obj),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                alert('Registration Successfull');
+                                $("#formID")[0].reset();
+                                document.getElementById('formID').style.display = 'none';
+                                document.getElementById('bt1').style.display = 'block';
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert('Error occured');
+                                document.getElementById('formID').style.display = 'none';
+                                document.getElementById('formID1').style.display = 'none';
+                                location.reload(true);
+                            }
+                        });
+
+                    });
+
+                          $.ajax({
+                            type: "GET",
+                            url: "https://localhost:44355/listemployee",
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (data) {
+                                var employee = '';
+                                $.each(data, function (key, value) {
+                                    employee += '<tr>';
+                                    employee += '<td onclick="test(this)" class="btn btn-primary">' + value.employeeid + '</td>';
+
+                                    employee += '<td>' +
+                                        value.firstname + '</td>';
+
+                                    employee += '<td>' +
+                                        value.lastname + '</td>';
+
+                                    employee += '<td>' +
+                                        value.gender + '</td>';
+                                    employee += '<td>' +
+                                        value.dob + '</td>';
+                                    employee += '<td>' +
+                                        value.email + '</td>';
+                                    employee += '<td>' +
+                                        value.phone + '</td>';
+                                    employee += '<td>' +
+                                        value.departmentname + '</td>';
+                                    employee += '<td>' +
+                                        value.hobbies + '</td>';
+                                    employee += '<td>' +
+                                        value.cityname + '</td>';
+                                    employee += '<td>' +
+                                        value.statename + '</td>';
+                                    employee += '<td>' +
+                                        value.cname + '</td>';
+                                    employee += '<td>' +
+                                        value.pincode + '</td>';
+                                    employee +='</tr>';
+                                });
+                                $('#table').append(employee);
+                            }
+                          });
+                    $("#btn2").click(function () {
+                        var obj = {
+                            cname: $('#cname').val()
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44355/addcountry",
+                            data: JSON.stringify(obj),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                alert('Country Added In Record');
+                                document.getElementById('formID1').style.display = 'none';
+                                document.getElementById('bt3').style.display = 'block';
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert('Error occured');
+                                document.getElementById('formID').style.display = 'none';
+                                document.getElementById('formID1').style.display = 'none';
+                                location.reload(true);
+                            }
+                        });
+
+                    });
+                    $("#btn4").click(function () {
+                        var obj = {
+                            statename: $('#statename').val(),
+                            countryid: parseInt($('#country').val())
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44355/addstate",
+                            data: JSON.stringify(obj),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                alert('State Added In Record');
+                                document.getElementById('formID3').style.display = 'none';
+                                document.getElementById('bt5').style.display = 'block';
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert('Error occured');
+                                document.getElementById('formID').style.display = 'none';
+                                document.getElementById('formID1').style.display = 'none';
+                                document.getElementById('formID3').style.display = 'none';
+                                location.reload(true);
+                            }
+                        });
+                    });
+                    $("#btn6").click(function () {
+                        var obj = {
+                            stateid: parseInt($('#state1').val()),
+                            cityname: $('#cityname').val()
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44355/addcity",
+                            data: JSON.stringify(obj),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                alert('City Added In Record');
+                                document.getElementById('formID4').style.display = 'none';
+                                document.getElementById('bt7').style.display = 'block';
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert('Error occured');
+                                document.getElementById('formID4').style.display = 'none';
+                                location.reload(true);
+                            }
+                        });
+                    });
+                    $("#btn8").click(function () {
+                        var obj = {
+                            departmentname: $('#dname').val()
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44355/adddepartment",
+                            data: JSON.stringify(obj),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                alert('Department Added In Record');
+                                document.getElementById('formID5').style.display = 'none';
+                                document.getElementById('bt9').style.display = 'block';
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert('Error occured');
+                                document.getElementById('formID5').style.display = 'none';
+                                document.getElementById('bt9').style.display = 'block';
+                                location.reload(true);
+                            }
+                        });
+                    });
+                });
+                function test(element) {
+                    var employeeid = parseInt(element.innerHTML);
+                    if (confirm("Are you sure?")) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "https://localhost:44355/deleteemployee?employeeid=" + employeeid,
+                            success: function (result) {
+                                alert('Record Deleted');
+                                location.reload(true);
+                            },
+                            error: function () {
+                                alert("failed");
+                            }
+                        });
+                    }
+                    return false;
+                }
+            </script>
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - WebUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
